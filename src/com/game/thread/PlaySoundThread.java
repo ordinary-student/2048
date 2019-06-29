@@ -1,4 +1,4 @@
-package game;
+package com.game.thread;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,12 +9,17 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
-//播放声音的线程
-public class PlaySound extends Thread
+/**
+ * 播放声音的线程
+ * 
+ * @author ordinary-students
+ *
+ */
+public class PlaySoundThread extends Thread
 {
 	private String filename;
 
-	public PlaySound(String wavfile)
+	public PlaySoundThread(String wavfile)
 	{
 
 		filename = "res/" + wavfile;

@@ -1,4 +1,4 @@
-package game;
+package com.game.main;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,15 +17,23 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
-public class Game extends JFrame
+/**
+ * 2048游戏
+ * 
+ * @author ordinary-students
+ *
+ */
+public class Game2048 extends JFrame
 {
 
 	private static final long serialVersionUID = 1L;
+	// 用于存放数据的数组
+	private int Numbers[][] = new int[4][4];
 
 	public static void main(String[] args)
 	{
-		final Game UI = new Game();
-		UI.IntUI();
+		final Game2048 UI = new Game2048();
+		UI.initUI();
 		// 设置窗体关闭
 		UI.addWindowListener(new WindowAdapter()
 		{
@@ -38,10 +46,10 @@ public class Game extends JFrame
 		});
 	}
 
-	// 用于存放数据的数组
-	private int Numbers[][] = new int[4][4];
-
-	private void IntUI()
+	/**
+	 * 初始化界面
+	 */
+	private void initUI()
 	{
 		this.setTitle("2048小游戏");
 		this.setLocation(450, 100);

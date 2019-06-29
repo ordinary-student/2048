@@ -1,4 +1,4 @@
-package game;
+package com.game.main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,10 +13,16 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import com.game.thread.PlaySoundThread;
+
+/**
+ * @author ordinary-students
+ *
+ */
 public class MyListener extends KeyAdapter implements ActionListener
 {
 
-	private Game UI;// 界面对象
+	private Game2048 UI;// 界面对象
 	private int Numbers[][];// 存放数据的数组
 	private Random rand = new Random();
 	private int BackUp[][] = new int[4][4];// 用于备份数组，供回退时使用
@@ -29,7 +35,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 	public JCheckBox isSoundBox;
 	private boolean isWin = false, relive = false, hasBack = false, isSound = true;
 
-	public MyListener(Game UI, int Numbers[][], JLabel lb, JButton bt, JButton about, JButton back,
+	public MyListener(Game2048 UI, int Numbers[][], JLabel lb, JButton bt, JButton about, JButton back,
 			JCheckBox isSoundBox, JMenuItem m1, JMenuItem m2, JMenuItem m3, JMenuItem m4)
 	{
 		this.UI = UI;
@@ -173,7 +179,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 				case 37:
 					// 向左移动
 					if (isSound == true)
-						new PlaySound("move.wav").start();
+						new PlaySoundThread("move.wav").start();
 					for (int h = 0; h < 4; h++)
 						for (int l = 0; l < 4; l++)
 							if (Numbers[h][l] != 0)
@@ -194,7 +200,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 									&& (Numbers[h][l] != 0 || Numbers[h][l + 1] != 0))
 							{
 								if (isSound == true)
-									new PlaySound("merge.wav").start();
+									new PlaySoundThread("merge.wav").start();
 								Numbers[h][l] = Numbers[h][l] + Numbers[h][l + 1];
 								Numbers[h][l + 1] = 0;
 								Counter++;
@@ -223,7 +229,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 
 				case 39:// 向右移动
 					if (isSound == true)
-						new PlaySound("move.wav").start();
+						new PlaySoundThread("move.wav").start();
 					for (int h = 3; h >= 0; h--)
 						for (int l = 3; l >= 0; l--)
 							if (Numbers[h][l] != 0)
@@ -245,7 +251,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 									&& (Numbers[h][l] != 0 || Numbers[h][l + 1] != 0))
 							{
 								if (isSound == true)
-									new PlaySound("merge.wav").start();
+									new PlaySoundThread("merge.wav").start();
 								Numbers[h][l + 1] = Numbers[h][l] + Numbers[h][l + 1];
 								Numbers[h][l] = 0;
 								Counter++;
@@ -274,7 +280,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 				case 38:
 					// 向上移动
 					if (isSound == true)
-						new PlaySound("move.wav").start();
+						new PlaySoundThread("move.wav").start();
 					for (int l = 0; l < 4; l++)
 						for (int h = 0; h < 4; h++)
 							if (Numbers[h][l] != 0)
@@ -295,7 +301,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 									&& (Numbers[h][l] != 0 || Numbers[h + 1][l] != 0))
 							{
 								if (isSound == true)
-									new PlaySound("merge.wav").start();
+									new PlaySoundThread("merge.wav").start();
 								Numbers[h][l] = Numbers[h][l] + Numbers[h + 1][l];
 								Numbers[h + 1][l] = 0;
 								Counter++;
@@ -325,7 +331,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 				case 40:
 					// 向下移动
 					if (isSound == true)
-						new PlaySound("move.wav").start();
+						new PlaySoundThread("move.wav").start();
 					for (int l = 3; l >= 0; l--)
 						for (int h = 3; h >= 0; h--)
 							if (Numbers[h][l] != 0)
@@ -346,7 +352,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 									&& (Numbers[h][l] != 0 || Numbers[h + 1][l] != 0))
 							{
 								if (isSound == true)
-									new PlaySound("merge.wav").start();
+									new PlaySoundThread("merge.wav").start();
 								Numbers[h + 1][l] = Numbers[h][l] + Numbers[h + 1][l];
 								Numbers[h][l] = 0;
 								Counter++;
