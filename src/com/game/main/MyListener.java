@@ -13,17 +13,17 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import com.game.frame.Game2048;
+import com.game.frame.GameFrame;
 import com.game.thread.PlaySoundThread;
 
 /**
- * @author ordinary-students
+ * @author ordinary-student
  *
  */
 public class MyListener extends KeyAdapter implements ActionListener
 {
 
-	private Game2048 UI;// 界面对象
+	private GameFrame UI;// 界面对象
 	private int Numbers[][];// 存放数据的数组
 	private Random rand = new Random();
 	private int BackUp[][] = new int[4][4];// 用于备份数组，供回退时使用
@@ -36,7 +36,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 	public JCheckBox isSoundBox;
 	private boolean isWin = false, relive = false, hasBack = false, isSound = true;
 
-	public MyListener(Game2048 UI, int Numbers[][], JLabel lb, JButton bt, JButton about, JButton back,
+	public MyListener(GameFrame UI, int Numbers[][], JLabel lb, JButton bt, JButton about, JButton back,
 			JCheckBox isSoundBox, JMenuItem m1, JMenuItem m2, JMenuItem m3, JMenuItem m4)
 	{
 		this.UI = UI;

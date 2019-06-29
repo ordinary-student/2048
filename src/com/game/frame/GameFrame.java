@@ -5,8 +5,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,89 +12,90 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 import com.game.main.MyListener;
+import com.game.utils.WindowUtil;
 
 /**
  * 2048游戏
  * 
- * @author ordinary-students
+ * @author ordinary-student
  *
  */
-public class Game2048 extends JFrame
+public class GameFrame extends JFrame
 {
 
 	private static final long serialVersionUID = 1L;
 	// 用于存放数据的数组
 	private int Numbers[][] = new int[4][4];
 
-	public static void main(String[] args)
+	/*
+	 * 构造方法
+	 */
+	public GameFrame()
 	{
-		final Game2048 UI = new Game2048();
-		UI.initUI();
-		// 设置窗体关闭
-		UI.addWindowListener(new WindowAdapter()
-		{
-			@Override
-			public void windowClosing(WindowEvent e)
-			{
-				JOptionPane.showMessageDialog(UI, "欢迎下次再玩！再见！");
-				System.exit(0);
-			}
-		});
+		// 初始化界面
+		initUI();
 	}
 
 	/**
 	 * 初始化界面
 	 */
-	private void initUI()
+	public void initUI()
 	{
-		this.setTitle("2048小游戏");
-		this.setLocation(450, 100);
-		this.setSize(400, 500);
-		this.setLayout(null);
+		// 设置标题
+		setTitle("2048小游戏");
+		// 设置大小
+		setSize(400, 500);
+		// 不可改变大小
+		setResizable(false);
+		// 设置居中
+		WindowUtil.center(this);
+		// 设置布局
+		setLayout(null);
+		// 设置关闭方式
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		// 开始游戏按钮
-		ImageIcon imgicon = new ImageIcon("res/start.png");
-		JButton bt = new JButton(imgicon);
-		bt.setToolTipText("开始新游戏");
-		bt.setFocusable(false);
-		bt.setBorderPainted(false);
-		bt.setFocusPainted(false);
-		bt.setContentAreaFilled(false);
-		bt.setBounds(5, 10, 120, 30);// 设置按钮的x，y坐标位置和宽度与高度
-		this.add(bt);
+		ImageIcon startIcon = new ImageIcon("res/start.png");
+		JButton startButton = new JButton(startIcon);
+		startButton.setToolTipText("开始新游戏");
+		startButton.setBounds(5, 10, 120, 30);
+		startButton.setFocusable(false);
+		startButton.setBorderPainted(false);
+		startButton.setFocusPainted(false);
+		startButton.setContentAreaFilled(false);
+		getContentPane().add(startButton);
 
 		// 后退一步按钮
-		ImageIcon backicon = new ImageIcon("res/backicon.png");
-		JButton back = new JButton(backicon);
-		back.setToolTipText("后退一步");
-		back.setFocusable(false);
-		back.setBorderPainted(false);
-		back.setFocusPainted(false);
-		back.setContentAreaFilled(false);
-		back.setBounds(270, 10, 120, 30);// 设置按钮的x，y坐标位置和宽度与高度
-		this.add(back);
+		ImageIcon backIcon = new ImageIcon("res/back.png");
+		JButton backButton = new JButton(backIcon);
+		backButton.setToolTipText("后退一步");
+		backButton.setBounds(270, 10, 120, 30);
+		backButton.setFocusable(false);
+		backButton.setBorderPainted(false);
+		backButton.setFocusPainted(false);
+		backButton.setContentAreaFilled(false);
+		getContentPane().add(backButton);
 
 		// 关于按钮
-		ImageIcon imgicon2 = new ImageIcon("res/about.png");
-		JButton about = new JButton(imgicon2);
-		about.setToolTipText("帮助");
-		about.setFocusable(false);
-		about.setBorderPainted(false);
-		about.setFocusPainted(false);
-		about.setContentAreaFilled(false);
-		about.setBounds(160, 10, 70, 30);
-		this.add(about);
+		ImageIcon aboutIcon = new ImageIcon("res/about.png");
+		JButton aboutButton = new JButton(aboutIcon);
+		aboutButton.setToolTipText("帮助");
+		aboutButton.setBounds(160, 10, 70, 30);
+		aboutButton.setFocusable(false);
+		aboutButton.setBorderPainted(false);
+		aboutButton.setFocusPainted(false);
+		aboutButton.setContentAreaFilled(false);
+		getContentPane().add(aboutButton);
 
 		// 分数显示
-		JLabel lb = new JLabel("分数：0");
-		lb.setBounds(40, 45, 120, 30);
-		lb.setFont(new Font("幼圆", Font.CENTER_BASELINE, 18));
-		lb.setForeground(new Color(0x000000));
-		this.add(lb);
+		JLabel scoreLabel = new JLabel("分数：0");
+		scoreLabel.setBounds(40, 45, 120, 30);
+		scoreLabel.setFont(new Font("幼圆", Font.CENTER_BASELINE, 18));
+		scoreLabel.setForeground(new Color(0x000000));
+		getContentPane().add(scoreLabel);
 
 		// 静音按钮选项
 		JCheckBox isSoundBox = new JCheckBox("静音");
@@ -136,21 +135,22 @@ public class Game2048 extends JFrame
 			}
 		});
 
-		this.setDefaultCloseOperation(3);
-		this.setResizable(false);
-		this.setVisible(true);// 显示界面
-
 		// 创建事件处理类
-		MyListener cl = new MyListener(this, Numbers, lb, bt, about, back, isSoundBox, m1, m2, m3, m4);
-		bt.addActionListener(cl);
-		about.addActionListener(cl);
-		back.addActionListener(cl);
+		MyListener cl = new MyListener(this, Numbers, scoreLabel, startButton, aboutButton, backButton, isSoundBox, m1,
+				m2, m3, m4);
+		startButton.addActionListener(cl);
+		aboutButton.addActionListener(cl);
+		backButton.addActionListener(cl);
 		isSoundBox.addActionListener(cl);
 		m1.addActionListener(cl);
 		m2.addActionListener(cl);
 		m3.addActionListener(cl);
 		m4.addActionListener(cl);
 		this.addKeyListener(cl);
+
+		validate();
+		// 显示界面
+		setVisible(true);
 
 	}
 

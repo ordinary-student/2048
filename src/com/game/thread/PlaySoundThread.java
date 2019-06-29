@@ -11,7 +11,7 @@ import javax.sound.sampled.SourceDataLine;
 /**
  * 播放声音的线程
  * 
- * @author ordinary-students
+ * @author ordinary-student
  *
  */
 public class PlaySoundThread extends Thread
