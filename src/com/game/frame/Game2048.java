@@ -1,4 +1,4 @@
-package com.game.main;
+package com.game.frame;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,8 +17,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
+import com.game.main.MyListener;
+
 /**
- * 2048ÓÎÏ·
+ * 2048æ¸¸æˆ
  * 
  * @author ordinary-students
  *
@@ -27,61 +29,61 @@ public class Game2048 extends JFrame
 {
 
 	private static final long serialVersionUID = 1L;
-	// ÓÃÓÚ´æ·ÅÊı¾İµÄÊı×é
+	// ç”¨äºå­˜æ”¾æ•°æ®çš„æ•°ç»„
 	private int Numbers[][] = new int[4][4];
 
 	public static void main(String[] args)
 	{
 		final Game2048 UI = new Game2048();
 		UI.initUI();
-		// ÉèÖÃ´°Ìå¹Ø±Õ
+		// è®¾ç½®çª—ä½“å…³é—­
 		UI.addWindowListener(new WindowAdapter()
 		{
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				JOptionPane.showMessageDialog(UI, "»¶Ó­ÏÂ´ÎÔÙÍæ£¡ÔÙ¼û£¡");
+				JOptionPane.showMessageDialog(UI, "æ¬¢è¿ä¸‹æ¬¡å†ç©ï¼å†è§ï¼");
 				System.exit(0);
 			}
 		});
 	}
 
 	/**
-	 * ³õÊ¼»¯½çÃæ
+	 * åˆå§‹åŒ–ç•Œé¢
 	 */
 	private void initUI()
 	{
-		this.setTitle("2048Ğ¡ÓÎÏ·");
+		this.setTitle("2048å°æ¸¸æˆ");
 		this.setLocation(450, 100);
 		this.setSize(400, 500);
 		this.setLayout(null);
 
-		// ¿ªÊ¼ÓÎÏ·°´Å¥
+		// å¼€å§‹æ¸¸æˆæŒ‰é’®
 		ImageIcon imgicon = new ImageIcon("res/start.png");
 		JButton bt = new JButton(imgicon);
-		bt.setToolTipText("¿ªÊ¼ĞÂÓÎÏ·");
+		bt.setToolTipText("å¼€å§‹æ–°æ¸¸æˆ");
 		bt.setFocusable(false);
 		bt.setBorderPainted(false);
 		bt.setFocusPainted(false);
 		bt.setContentAreaFilled(false);
-		bt.setBounds(5, 10, 120, 30);// ÉèÖÃ°´Å¥µÄx£¬y×ø±êÎ»ÖÃºÍ¿í¶ÈÓë¸ß¶È
+		bt.setBounds(5, 10, 120, 30);// è®¾ç½®æŒ‰é’®çš„xï¼Œyåæ ‡ä½ç½®å’Œå®½åº¦ä¸é«˜åº¦
 		this.add(bt);
 
-		// ºóÍËÒ»²½°´Å¥
+		// åé€€ä¸€æ­¥æŒ‰é’®
 		ImageIcon backicon = new ImageIcon("res/backicon.png");
 		JButton back = new JButton(backicon);
-		back.setToolTipText("ºóÍËÒ»²½");
+		back.setToolTipText("åé€€ä¸€æ­¥");
 		back.setFocusable(false);
 		back.setBorderPainted(false);
 		back.setFocusPainted(false);
 		back.setContentAreaFilled(false);
-		back.setBounds(270, 10, 120, 30);// ÉèÖÃ°´Å¥µÄx£¬y×ø±êÎ»ÖÃºÍ¿í¶ÈÓë¸ß¶È
+		back.setBounds(270, 10, 120, 30);// è®¾ç½®æŒ‰é’®çš„xï¼Œyåæ ‡ä½ç½®å’Œå®½åº¦ä¸é«˜åº¦
 		this.add(back);
 
-		// ¹ØÓÚ°´Å¥
+		// å…³äºæŒ‰é’®
 		ImageIcon imgicon2 = new ImageIcon("res/about.png");
 		JButton about = new JButton(imgicon2);
-		about.setToolTipText("°ïÖú");
+		about.setToolTipText("å¸®åŠ©");
 		about.setFocusable(false);
 		about.setBorderPainted(false);
 		about.setFocusPainted(false);
@@ -89,33 +91,33 @@ public class Game2048 extends JFrame
 		about.setBounds(160, 10, 70, 30);
 		this.add(about);
 
-		// ·ÖÊıÏÔÊ¾
-		JLabel lb = new JLabel("·ÖÊı£º0");
+		// åˆ†æ•°æ˜¾ç¤º
+		JLabel lb = new JLabel("åˆ†æ•°ï¼š0");
 		lb.setBounds(40, 45, 120, 30);
-		lb.setFont(new Font("Ó×Ô²", Font.CENTER_BASELINE, 18));
+		lb.setFont(new Font("å¹¼åœ†", Font.CENTER_BASELINE, 18));
 		lb.setForeground(new Color(0x000000));
 		this.add(lb);
 
-		// ¾²Òô°´Å¥Ñ¡Ïî
-		JCheckBox isSoundBox = new JCheckBox("¾²Òô");
+		// é™éŸ³æŒ‰é’®é€‰é¡¹
+		JCheckBox isSoundBox = new JCheckBox("é™éŸ³");
 		isSoundBox.setBounds(290, 45, 120, 30);
-		isSoundBox.setFont(new Font("Ó×Ô²", Font.CENTER_BASELINE, 18));
+		isSoundBox.setFont(new Font("å¹¼åœ†", Font.CENTER_BASELINE, 18));
 		isSoundBox.setFocusable(false);
 		isSoundBox.setBorderPainted(false);
 		isSoundBox.setFocusPainted(false);
 		isSoundBox.setContentAreaFilled(false);
 		this.add(isSoundBox);
 
-		// ÓÒ¼ü²Ëµ¥
-		final JPopupMenu popup = new JPopupMenu();// µ¯³öÓÒ¼ü²Ëµ¥
-		JMenuItem m1 = new JMenuItem("ÍËÒ»²½");
-		JMenuItem m2 = new JMenuItem("ĞÂÓÎÏ·");
-		JMenuItem m3 = new JMenuItem("°ïÖú");
-		JMenuItem m4 = new JMenuItem("ÍË³ö");
-		m1.setFont(new Font("´ÖÌå", Font.CENTER_BASELINE, 18));
-		m2.setFont(new Font("´ÖÌå", Font.CENTER_BASELINE, 18));
-		m3.setFont(new Font("´ÖÌå", Font.CENTER_BASELINE, 18));
-		m4.setFont(new Font("´ÖÌå", Font.CENTER_BASELINE, 18));
+		// å³é”®èœå•
+		final JPopupMenu popup = new JPopupMenu();// å¼¹å‡ºå³é”®èœå•
+		JMenuItem m1 = new JMenuItem("é€€ä¸€æ­¥");
+		JMenuItem m2 = new JMenuItem("æ–°æ¸¸æˆ");
+		JMenuItem m3 = new JMenuItem("å¸®åŠ©");
+		JMenuItem m4 = new JMenuItem("é€€å‡º");
+		m1.setFont(new Font("ç²—ä½“", Font.CENTER_BASELINE, 18));
+		m2.setFont(new Font("ç²—ä½“", Font.CENTER_BASELINE, 18));
+		m3.setFont(new Font("ç²—ä½“", Font.CENTER_BASELINE, 18));
+		m4.setFont(new Font("ç²—ä½“", Font.CENTER_BASELINE, 18));
 
 		// popup.add(m1);
 		// popup.add(m2);
@@ -128,7 +130,7 @@ public class Game2048 extends JFrame
 			public void mouseClicked(MouseEvent e)
 			{
 				if (e.getButton() == MouseEvent.BUTTON3)
-				{// µ¯³öÓÒ¼ü²Ëµ¥
+				{// å¼¹å‡ºå³é”®èœå•
 					popup.show(e.getComponent(), e.getX(), e.getY());
 				}
 			}
@@ -136,9 +138,9 @@ public class Game2048 extends JFrame
 
 		this.setDefaultCloseOperation(3);
 		this.setResizable(false);
-		this.setVisible(true);// ÏÔÊ¾½çÃæ
+		this.setVisible(true);// æ˜¾ç¤ºç•Œé¢
 
-		// ´´½¨ÊÂ¼ş´¦ÀíÀà
+		// åˆ›å»ºäº‹ä»¶å¤„ç†ç±»
 		MyListener cl = new MyListener(this, Numbers, lb, bt, about, back, isSoundBox, m1, m2, m3, m4);
 		bt.addActionListener(cl);
 		about.addActionListener(cl);
@@ -152,24 +154,24 @@ public class Game2048 extends JFrame
 
 	}
 
-	// ÖØĞ´´°Ìå
+	// é‡å†™çª—ä½“
 	@Override
 	public void paint(Graphics g)
 	{
 		super.paint(g);
 		g.setColor(new Color(0xBBADA0));
-		g.fillRoundRect(15, 110, 370, 370, 15, 15);// ´ó¾ØĞÎ¿ò
+		g.fillRoundRect(15, 110, 370, 370, 15, 15);// å¤§çŸ©å½¢æ¡†
 
 		g.setColor(new Color(0xCDC1B4));
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				g.fillRoundRect(25 + i * 90, 120 + j * 90, 80, 80, 15, 15);// Ğ¡¾ØĞÎ¿ò
+				g.fillRoundRect(25 + i * 90, 120 + j * 90, 80, 80, 15, 15);// å°çŸ©å½¢æ¡†
 			}
 		}
 
-		// µ÷ÕûÊı×ÖµÄÎ»ÖÃ²¢ÉÏÉ«
+		// è°ƒæ•´æ•°å­—çš„ä½ç½®å¹¶ä¸Šè‰²
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
@@ -251,7 +253,7 @@ public class Game2048 extends JFrame
 							break;
 						}
 
-					g.fillRoundRect(25 + i * 90, 120 + j * 90, 80, 80, 15, 15);// Ğ¡¾ØĞÎ¿òÉÏÉ«
+					g.fillRoundRect(25 + i * 90, 120 + j * 90, 80, 80, 15, 15);// å°çŸ©å½¢æ¡†ä¸Šè‰²
 					g.setColor(new Color(0x000000));
 					g.setFont(new Font("Kristen ITC", Font.PLAIN, FontSize));
 					g.drawString(Numbers[j][i] + "", 25 + i * 90 + 30 + MoveX, 120 + j * 90 + 50 + MoveY);

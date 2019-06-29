@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import com.game.frame.Game2048;
 import com.game.thread.PlaySoundThread;
 
 /**
@@ -22,14 +23,14 @@ import com.game.thread.PlaySoundThread;
 public class MyListener extends KeyAdapter implements ActionListener
 {
 
-	private Game2048 UI;// ½çÃæ¶ÔÏó
-	private int Numbers[][];// ´æ·ÅÊı¾İµÄÊı×é
+	private Game2048 UI;// ç•Œé¢å¯¹è±¡
+	private int Numbers[][];// å­˜æ”¾æ•°æ®çš„æ•°ç»„
 	private Random rand = new Random();
-	private int BackUp[][] = new int[4][4];// ÓÃÓÚ±¸·İÊı×é£¬¹©»ØÍËÊ±Ê¹ÓÃ
-	private int BackUp2[][] = new int[4][4];// ÓÃÓÚ±¸·İÊı×é£¬¹©ÆğËÀ»ØÉúÊ±Ê¹ÓÃ
+	private int BackUp[][] = new int[4][4];// ç”¨äºå¤‡ä»½æ•°ç»„ï¼Œä¾›å›é€€æ—¶ä½¿ç”¨
+	private int BackUp2[][] = new int[4][4];// ç”¨äºå¤‡ä»½æ•°ç»„ï¼Œä¾›èµ·æ­»å›ç”Ÿæ—¶ä½¿ç”¨
 	public JLabel lb;
 	int score = 0;
-	int tempscore, tempscore2;// ¼ÇÂ¼»ØÍËµÄ·ÖÊıÖµ
+	int tempscore, tempscore2;// è®°å½•å›é€€çš„åˆ†æ•°å€¼
 	public JButton bt, about, back;
 	public JMenuItem m1, m2, m3, m4;
 	public JCheckBox isSoundBox;
@@ -62,8 +63,8 @@ public class MyListener extends KeyAdapter implements ActionListener
 				for (int j = 0; j < 4; j++)
 					Numbers[i][j] = 0;
 
-			score = 0;// ±£Ö¤Ã¿´ÎÖØÖÃÓÎÏ·¶¼ÊÇ0·Ö¿ªÊ¼
-			lb.setText("·ÖÊı£º" + score);
+			score = 0;// ä¿è¯æ¯æ¬¡é‡ç½®æ¸¸æˆéƒ½æ˜¯0åˆ†å¼€å§‹
+			lb.setText("åˆ†æ•°ï¼š" + score);
 			int r1 = rand.nextInt(4);
 			int r2 = rand.nextInt(4);
 			int c1 = rand.nextInt(4);
@@ -75,28 +76,28 @@ public class MyListener extends KeyAdapter implements ActionListener
 				c2 = rand.nextInt(4);
 			}
 
-			// Éú³ÉÊı×Ö£¨2»òÕß4£©
+			// ç”Ÿæˆæ•°å­—ï¼ˆ2æˆ–è€…4ï¼‰
 			int value1 = rand.nextInt(2) * 2 + 2;
 			int value2 = rand.nextInt(2) * 2 + 2;
 
-			// °ÑÊı×Ö´æ½ø¶ÔÓ¦µÄÎ»ÖÃ
+			// æŠŠæ•°å­—å­˜è¿›å¯¹åº”çš„ä½ç½®
 			Numbers[r1][c1] = value1;
 			Numbers[r2][c2] = value2;
 			UI.paint(UI.getGraphics());
 		} else if (e.getSource() == about)
 		{
 			JOptionPane.showMessageDialog(UI,
-					"ÓÎÏ·¹æÔò£º\n" + "¿ªÊ¼Ê±ÆåÅÌÄÚËæ»ú³öÏÖÁ½¸öÊı×Ö£¬³öÏÖµÄÊı×Ö½ö¿ÉÄÜÎª2»ò4\n" + "Íæ¼Ò¿ÉÒÔÑ¡ÔñÉÏÏÂ×óÓÒËÄ¸ö·½Ïò£¬ÈôÆåÅÌÄÚµÄÊı×Ö³öÏÖÎ»ÒÆ»òºÏ²¢£¬ÊÓÎªÓĞĞ§ÒÆ¶¯\n"
-							+ "Íæ¼ÒÑ¡ÔñµÄ·½ÏòÉÏÈôÓĞÏàÍ¬µÄÊı×ÖÔòºÏ²¢£¬Ã¿´ÎÓĞĞ§ÒÆ¶¯¿ÉÒÔÍ¬Ê±ºÏ²¢£¬µ«²»¿ÉÒÔÁ¬ĞøºÏ²¢\n" + "ºÏ²¢ËùµÃµÄËùÓĞĞÂÉú³ÉÊı×ÖÏë¼Ó¼´Îª¸Ã²½µÄÓĞĞ§µÃ·Ö\n"
-							+ "Íæ¼ÒÑ¡ÔñµÄ·½ÏòĞĞ»òÁĞÇ°·½ÓĞ¿Õ¸ñÔò³öÏÖÎ»ÒÆ\n" + "Ã¿ÓĞĞ§ÒÆ¶¯Ò»²½£¬ÆåÅÌµÄ¿ÕÎ»(ÎŞÊı×Ö´¦)Ëæ»ú³öÏÖÒ»¸öÊı×Ö(ÒÀÈ»¿ÉÄÜÎª2»ò4)\n"
-							+ "ÆåÅÌ±»Êı×ÖÌîÂú£¬ÎŞ·¨½øĞĞÓĞĞ§ÒÆ¶¯£¬ÅĞ¸º£¬ÓÎÏ·½áÊø\n" + "ÆåÅÌÉÏ³öÏÖ2048£¬ÅĞÊ¤£¬ÓÎÏ·½áÊø¡£\n");
+					"æ¸¸æˆè§„åˆ™ï¼š\n" + "å¼€å§‹æ—¶æ£‹ç›˜å†…éšæœºå‡ºç°ä¸¤ä¸ªæ•°å­—ï¼Œå‡ºç°çš„æ•°å­—ä»…å¯èƒ½ä¸º2æˆ–4\n" + "ç©å®¶å¯ä»¥é€‰æ‹©ä¸Šä¸‹å·¦å³å››ä¸ªæ–¹å‘ï¼Œè‹¥æ£‹ç›˜å†…çš„æ•°å­—å‡ºç°ä½ç§»æˆ–åˆå¹¶ï¼Œè§†ä¸ºæœ‰æ•ˆç§»åŠ¨\n"
+							+ "ç©å®¶é€‰æ‹©çš„æ–¹å‘ä¸Šè‹¥æœ‰ç›¸åŒçš„æ•°å­—åˆ™åˆå¹¶ï¼Œæ¯æ¬¡æœ‰æ•ˆç§»åŠ¨å¯ä»¥åŒæ—¶åˆå¹¶ï¼Œä½†ä¸å¯ä»¥è¿ç»­åˆå¹¶\n" + "åˆå¹¶æ‰€å¾—çš„æ‰€æœ‰æ–°ç”Ÿæˆæ•°å­—æƒ³åŠ å³ä¸ºè¯¥æ­¥çš„æœ‰æ•ˆå¾—åˆ†\n"
+							+ "ç©å®¶é€‰æ‹©çš„æ–¹å‘è¡Œæˆ–åˆ—å‰æ–¹æœ‰ç©ºæ ¼åˆ™å‡ºç°ä½ç§»\n" + "æ¯æœ‰æ•ˆç§»åŠ¨ä¸€æ­¥ï¼Œæ£‹ç›˜çš„ç©ºä½(æ— æ•°å­—å¤„)éšæœºå‡ºç°ä¸€ä¸ªæ•°å­—(ä¾ç„¶å¯èƒ½ä¸º2æˆ–4)\n"
+							+ "æ£‹ç›˜è¢«æ•°å­—å¡«æ»¡ï¼Œæ— æ³•è¿›è¡Œæœ‰æ•ˆç§»åŠ¨ï¼Œåˆ¤è´Ÿï¼Œæ¸¸æˆç»“æŸ\n" + "æ£‹ç›˜ä¸Šå‡ºç°2048ï¼Œåˆ¤èƒœï¼Œæ¸¸æˆç»“æŸã€‚\n");
 		} else if (e.getSource() == back && hasBack == false)
 		{
 			hasBack = true;
 			if (relive == false)
 			{
 				score = tempscore;
-				lb.setText("·ÖÊı£º" + score);
+				lb.setText("åˆ†æ•°ï¼š" + score);
 				for (int i = 0; i < BackUp.length; i++)
 				{
 					Numbers[i] = Arrays.copyOf(BackUp[i], BackUp[i].length);
@@ -104,7 +105,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 			} else
 			{
 				score = tempscore2;
-				lb.setText("·ÖÊı£º" + score);
+				lb.setText("åˆ†æ•°ï¼š" + score);
 				for (int i = 0; i < BackUp2.length; i++)
 				{
 					Numbers[i] = Arrays.copyOf(BackUp2[i], BackUp2[i].length);
@@ -131,41 +132,41 @@ public class MyListener extends KeyAdapter implements ActionListener
 
 		} else if (e.getSource() == m4)
 		{
-			int chip = JOptionPane.showConfirmDialog(UI, "ÊÇ·ñÍË³öÓÎÏ·£¿", "ÌáÊ¾", JOptionPane.YES_NO_OPTION);
+			int chip = JOptionPane.showConfirmDialog(UI, "æ˜¯å¦é€€å‡ºæ¸¸æˆï¼Ÿ", "æç¤º", JOptionPane.YES_NO_OPTION);
 			if (chip == 0)
 			{
-				JOptionPane.showMessageDialog(UI, "»¶Ó­ÏÂ´ÎÔÙÍæ£¡ÔÙ¼û£¡");
+				JOptionPane.showMessageDialog(UI, "æ¬¢è¿ä¸‹æ¬¡å†ç©ï¼å†è§ï¼");
 				System.exit(0);
 			}
 			return;
 		}
 	}
 
-	// ¼üÅÌ¼àÌı
+	// é”®ç›˜ç›‘å¬
 	public void keyPressed(KeyEvent event)
 	{
 
-		int Counter = 0;// ¼ÆËãÆ÷£¬ÅĞ¶ÏÊÇ·ñÒÆ¶¯ÁË
-		int NumCounter = 0;// ÓÃÓÚÍ³¼ÆÕû¸ö´ó·½¿òÖĞÊı×ÖµÄ¸öÊı£¬ÅĞ¶ÏÊÇ·ñÒÑÂú
-		int NumNearCounter = 0;// ÓÃÓÚÍ³¼ÆÏàÁÚ¸ñ×ÓÊı×ÖÏàÍ¬µÄ¸öÊı
+		int Counter = 0;// è®¡ç®—å™¨ï¼Œåˆ¤æ–­æ˜¯å¦ç§»åŠ¨äº†
+		int NumCounter = 0;// ç”¨äºç»Ÿè®¡æ•´ä¸ªå¤§æ–¹æ¡†ä¸­æ•°å­—çš„ä¸ªæ•°ï¼Œåˆ¤æ–­æ˜¯å¦å·²æ»¡
+		int NumNearCounter = 0;// ç”¨äºç»Ÿè®¡ç›¸é‚»æ ¼å­æ•°å­—ç›¸åŒçš„ä¸ªæ•°
 		/*
-		 * ·½Ïò¼ü¼üÖµ£º×ó£º37ÉÏ£º38ÓÒ£º39ÏÂ£º40
+		 * æ–¹å‘é”®é”®å€¼ï¼šå·¦ï¼š37ä¸Šï¼š38å³ï¼š39ä¸‹ï¼š40
 		 */
 
 		hasBack = false;
 
 		if (BackUp != null || BackUp.length != 0)
 		{
-			tempscore2 = tempscore;// ÏÈ°Ñ·ÖÊı±¸·İºÃ
-			// ÏÂÃæµÄforÑ­»·µ÷ÓÃjava.util.Arrays.copyOf()·½·¨¸´ÖÆÊı×é£¬ÊµÏÖ±¸·İ
+			tempscore2 = tempscore;// å…ˆæŠŠåˆ†æ•°å¤‡ä»½å¥½
+			// ä¸‹é¢çš„forå¾ªç¯è°ƒç”¨java.util.Arrays.copyOf()æ–¹æ³•å¤åˆ¶æ•°ç»„ï¼Œå®ç°å¤‡ä»½
 			for (int i = 0; i < BackUp.length; i++)
 			{
 				BackUp2[i] = Arrays.copyOf(BackUp[i], BackUp[i].length);
 			}
 		}
 
-		tempscore = score;// ÏÈ°Ñ·ÖÊı±¸·İºÃ
-		// ÏÂÃæµÄforÑ­»·µ÷ÓÃjava.util.Arrays.copyOf()·½·¨¸´ÖÆÊı×é£¬ÊµÏÖ±¸·İ
+		tempscore = score;// å…ˆæŠŠåˆ†æ•°å¤‡ä»½å¥½
+		// ä¸‹é¢çš„forå¾ªç¯è°ƒç”¨java.util.Arrays.copyOf()æ–¹æ³•å¤åˆ¶æ•°ç»„ï¼Œå®ç°å¤‡ä»½
 		for (int i = 0; i < Numbers.length; i++)
 		{
 			BackUp[i] = Arrays.copyOf(Numbers[i], Numbers[i].length);
@@ -177,7 +178,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 				{
 
 				case 37:
-					// Ïò×óÒÆ¶¯
+					// å‘å·¦ç§»åŠ¨
 					if (isSound == true)
 						new PlaySoundThread("move.wav").start();
 					for (int h = 0; h < 4; h++)
@@ -227,7 +228,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 							}
 					break;
 
-				case 39:// ÏòÓÒÒÆ¶¯
+				case 39:// å‘å³ç§»åŠ¨
 					if (isSound == true)
 						new PlaySoundThread("move.wav").start();
 					for (int h = 3; h >= 0; h--)
@@ -278,7 +279,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 					break;
 
 				case 38:
-					// ÏòÉÏÒÆ¶¯
+					// å‘ä¸Šç§»åŠ¨
 					if (isSound == true)
 						new PlaySoundThread("move.wav").start();
 					for (int l = 0; l < 4; l++)
@@ -329,7 +330,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 					break;
 
 				case 40:
-					// ÏòÏÂÒÆ¶¯
+					// å‘ä¸‹ç§»åŠ¨
 					if (isSound == true)
 						new PlaySoundThread("move.wav").start();
 					for (int l = 3; l >= 0; l--)
@@ -416,7 +417,7 @@ public class MyListener extends KeyAdapter implements ActionListener
 			if (Counter > 0)
 			{
 
-				lb.setText("·ÖÊı£º" + score);
+				lb.setText("åˆ†æ•°ï¼š" + score);
 				int r1 = rand.nextInt(4);
 				int c1 = rand.nextInt(4);
 				while (Numbers[r1][c1] != 0)
@@ -431,14 +432,14 @@ public class MyListener extends KeyAdapter implements ActionListener
 			if (isWin == true)
 			{
 				UI.paint(UI.getGraphics());
-				JOptionPane.showMessageDialog(UI, "¹§Ï²ÄãÓ®ÁË!\nÄúµÄ×îÖÕµÃ·ÖÎª£º" + score);
+				JOptionPane.showMessageDialog(UI, "æ­å–œä½ èµ¢äº†!\næ‚¨çš„æœ€ç»ˆå¾—åˆ†ä¸ºï¼š" + score);
 			}
 
 			if (NumCounter == 16 && NumNearCounter == 0)
 			{
 				relive = true;
 				JOptionPane.showMessageDialog(UI,
-						"Ã»µØ·½¿ÉÒÔºÏ²¢¿©!!" + "\nºÜÒÅº¶£¬ÄúÊäÁË~>_<~" + "\nÇÄÇÄ¸æËßÄã£¬ÓÎÏ·ÓĞÆğËÀ»ØÉú¹¦ÄÜÅ¶£¬²»ĞÅÄã¡°ÍËÒ»²½¡±ÊÔÊÔ£¿" + "\nËµ²»¶¨ÄÜÅ¤×ªÇ¬À¤Äó £¨^_~£©");
+						"æ²¡åœ°æ–¹å¯ä»¥åˆå¹¶å’¯!!" + "\nå¾ˆé—æ†¾ï¼Œæ‚¨è¾“äº†~>_<~" + "\næ‚„æ‚„å‘Šè¯‰ä½ ï¼Œæ¸¸æˆæœ‰èµ·æ­»å›ç”ŸåŠŸèƒ½å“¦ï¼Œä¸ä¿¡ä½ â€œé€€ä¸€æ­¥â€è¯•è¯•ï¼Ÿ" + "\nè¯´ä¸å®šèƒ½æ‰­è½¬ä¹¾å¤æ ï¼ˆ^_~ï¼‰");
 			}
 			UI.paint(UI.getGraphics());
 		}

@@ -10,7 +10,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
 /**
- * ²¥·ÅÉùÒôµÄÏß³Ì
+ * æ’­æ”¾å£°éŸ³çš„çº¿ç¨‹
  * 
  * @author ordinary-students
  *
@@ -51,7 +51,7 @@ public class PlaySoundThread extends Thread
 		}
 		auline.start();
 		int nBytesRead = 0;
-		// ÕâÊÇ»º³å
+		// è¿™æ˜¯ç¼“å†²
 		byte[] abData = new byte[512];
 		try
 		{
