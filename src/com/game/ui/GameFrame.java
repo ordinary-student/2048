@@ -9,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
-import com.game.main.Actions;
+import com.game.action.Actions;
 import com.game.utils.WindowUtil;
 
 /**
@@ -22,7 +22,7 @@ public class GameFrame extends KFrame
 {
 	private static final long serialVersionUID = -3578214145718737571L;
 	// 用于存放数据的数组
-	private int numbers[][] = new int[4][4];
+	private int[][] numbers = new int[4][4];
 
 	/*
 	 * 构造方法
