@@ -1,6 +1,6 @@
 package com.game.main;
 
-import com.game.frame.GameFrame;
+import com.game.ui.GameFrame;
 
 /**
  * 2048游戏

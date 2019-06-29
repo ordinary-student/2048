@@ -13,14 +13,16 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import com.game.frame.GameFrame;
 import com.game.thread.PlaySoundThread;
+import com.game.ui.GameFrame;
 
 /**
+ * 事件处理类
+ * 
  * @author ordinary-student
  *
  */
-public class MyListener extends KeyAdapter implements ActionListener
+public class Actions extends KeyAdapter implements ActionListener
 {
 
 	private GameFrame UI;// 界面对象
@@ -36,20 +38,16 @@ public class MyListener extends KeyAdapter implements ActionListener
 	public JCheckBox isSoundBox;
 	private boolean isWin = false, relive = false, hasBack = false, isSound = true;
 
-	public MyListener(GameFrame UI, int Numbers[][], JLabel lb, JButton bt, JButton about, JButton back,
-			JCheckBox isSoundBox, JMenuItem m1, JMenuItem m2, JMenuItem m3, JMenuItem m4)
+	public Actions(GameFrame gameFrame, int Numbers[][], JLabel lb, JButton bt, JButton about, JButton back,
+			JCheckBox isSoundBox)
 	{
-		this.UI = UI;
+		this.UI = gameFrame;
 		this.Numbers = Numbers;
 		this.lb = lb;
 		this.bt = bt;
 		this.about = about;
 		this.back = back;
 		this.isSoundBox = isSoundBox;
-		this.m1 = m1;
-		this.m2 = m2;
-		this.m3 = m3;
-		this.m4 = m4;
 	}
 
 	@Override
