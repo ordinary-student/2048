@@ -10,7 +10,6 @@ import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import com.game.thread.PlaySoundThread;
@@ -26,82 +25,64 @@ public class Actions extends KeyAdapter implements ActionListener
 {
 	// 游戏窗口对象
 	private GameFrame gameFrame;
-	// 存放数据的数组
-	private int numbers[][];
 
+	// 随机种子
 	private Random rand = new Random();
 
+	// 存放数据的数组
+	private int numbers[][];
 	// 用于备份数组，供回退时使用
 	private int[][] backup = new int[4][4];
 	// 用于备份数组，供起死回生时使用
 	private int[][] liveup = new int[4][4];
 
 	// 分数标签
-	public JLabel scoreLabel;
-	int score = 0;
-	int tempscore, tempscore2;// 记录回退的分数值
-	public JButton bt, about, back;
-	public JMenuItem m1, m2, m3, m4;
-	public JCheckBox isSoundBox;
-	private boolean isWin = false, relive = false, hasBack = false, isSound = true;
+	private JLabel scoreLabel;
+	// 分数
+	private int score = 0;
+	// 记录回退的分数值
+	private int tempScore, tempScore2;
+	// 按钮
+	private JButton startButton, aboutButton, backButton;
+	// 静音勾选框
+	private JCheckBox soundCheckBok;
+	// 标志
+	private boolean isWin = false, relive = false, hasBack = false, soundFlag = true;
 
 	public Actions(GameFrame gameFrame, int[][] numbers, JLabel scoreLabel, JButton startButton, JButton aboutButton,
-			JButton back, JCheckBox soundCheckBok)
+			JButton backButton, JCheckBox soundCheckBok)
 	{
 		this.gameFrame = gameFrame;
 		this.numbers = numbers;
 		this.scoreLabel = scoreLabel;
-		this.bt = startButton;
-		this.about = aboutButton;
-		this.back = back;
-		this.isSoundBox = soundCheckBok;
+		this.startButton = startButton;
+		this.aboutButton = aboutButton;
+		this.backButton = backButton;
+		this.soundCheckBok = soundCheckBok;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-
-		if (e.getSource() == bt)
+		// 判断来源
+		if (e.getSource() == startButton)
 		{
-			isWin = false;
-			for (int i = 0; i < 4; i++)
-				for (int j = 0; j < 4; j++)
-					numbers[i][j] = 0;
+			// 新游戏
+			newGame();
 
-			score = 0;// 保证每次重置游戏都是0分开始
-			scoreLabel.setText("分数：" + score);
-			int r1 = rand.nextInt(4);
-			int r2 = rand.nextInt(4);
-			int c1 = rand.nextInt(4);
-			int c2 = rand.nextInt(4);
-
-			while (r1 == r2 && c1 == c2)
-			{
-				r2 = rand.nextInt(4);
-				c2 = rand.nextInt(4);
-			}
-
-			// 生成数字（2或者4）
-			int value1 = rand.nextInt(2) * 2 + 2;
-			int value2 = rand.nextInt(2) * 2 + 2;
-
-			// 把数字存进对应的位置
-			numbers[r1][c1] = value1;
-			numbers[r2][c2] = value2;
-			gameFrame.paint(gameFrame.getGraphics());
-		} else if (e.getSource() == about)
+		} else if (e.getSource() == aboutButton)
 		{
 			JOptionPane.showMessageDialog(gameFrame,
 					"游戏规则：\n" + "开始时棋盘内随机出现两个数字，出现的数字仅可能为2或4\n" + "玩家可以选择上下左右四个方向，若棋盘内的数字出现位移或合并，视为有效移动\n"
 							+ "玩家选择的方向上若有相同的数字则合并，每次有效移动可以同时合并，但不可以连续合并\n" + "合并所得的所有新生成数字想加即为该步的有效得分\n"
 							+ "玩家选择的方向行或列前方有空格则出现位移\n" + "每有效移动一步，棋盘的空位(无数字处)随机出现一个数字(依然可能为2或4)\n"
 							+ "棋盘被数字填满，无法进行有效移动，判负，游戏结束\n" + "棋盘上出现2048，判胜，游戏结束。\n");
-		} else if (e.getSource() == back && hasBack == false)
+		} else if (e.getSource() == backButton && hasBack == false)
 		{
 			hasBack = true;
 			if (relive == false)
 			{
-				score = tempscore;
+				score = tempScore;
 				scoreLabel.setText("分数：" + score);
 				for (int i = 0; i < backup.length; i++)
 				{
@@ -109,7 +90,7 @@ public class Actions extends KeyAdapter implements ActionListener
 				}
 			} else
 			{
-				score = tempscore2;
+				score = tempScore2;
 				scoreLabel.setText("分数：" + score);
 				for (int i = 0; i < liveup.length; i++)
 				{
@@ -118,36 +99,66 @@ public class Actions extends KeyAdapter implements ActionListener
 				relive = false;
 			}
 			gameFrame.paint(gameFrame.getGraphics());
-		} else if (e.getSource().equals(isSoundBox))
+		} else if (e.getSource().equals(soundCheckBok))
 		{
-			if (isSoundBox.isSelected())
-				isSound = false;
-			else
-				isSound = true;
-		} else if (e.getSource() == m1)
-		{
-
-		} else if (e.getSource() == m2)
-		{
-			// bt.doClick(10);
-
-		} else if (e.getSource() == m3)
-		{
-			about.doClick(10);
-
-		} else if (e.getSource() == m4)
-		{
-			int chip = JOptionPane.showConfirmDialog(gameFrame, "是否退出游戏？", "提示", JOptionPane.YES_NO_OPTION);
-			if (chip == 0)
+			if (soundCheckBok.isSelected())
 			{
-				JOptionPane.showMessageDialog(gameFrame, "欢迎下次再玩！再见！");
-				System.exit(0);
+				soundFlag = false;
+			} else
+			{
+				soundFlag = true;
 			}
-			return;
 		}
 	}
 
+	/**
+	 * 新游戏
+	 */
+	private void newGame()
+	{
+		// 重置标志
+		isWin = false;
+		// 重置数字
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				numbers[i][j] = 0;
+			}
+		}
+
+		// 重置分数
+		score = 0;
+		scoreLabel.setText("分数：" + score);
+
+		// 生成随机位置
+		// 随机行号
+		int randomRow1 = rand.nextInt(4);
+		int randomRow2 = rand.nextInt(4);
+		// 随机列号
+		int randomColumn1 = rand.nextInt(4);
+		int randomColumn2 = rand.nextInt(4);
+
+		// 当有重复时，重新生成
+		while ((randomRow1 == randomRow2) && (randomColumn1 == randomColumn2))
+		{
+			randomRow2 = rand.nextInt(4);
+			randomColumn2 = rand.nextInt(4);
+		}
+
+		// 生成随机数字（2或者4）
+		int randomNum1 = rand.nextInt(2) * 2 + 2;
+		int randomNum2 = rand.nextInt(2) * 2 + 2;
+
+		// 把随机数字存进对应的随机位置
+		numbers[randomRow1][randomColumn1] = randomNum1;
+		numbers[randomRow2][randomColumn2] = randomNum2;
+		// 绘制
+		gameFrame.paint(gameFrame.getGraphics());
+	}
+
 	// 键盘监听
+	@Override
 	public void keyPressed(KeyEvent event)
 	{
 
@@ -162,7 +173,7 @@ public class Actions extends KeyAdapter implements ActionListener
 
 		if (backup != null || backup.length != 0)
 		{
-			tempscore2 = tempscore;// 先把分数备份好
+			tempScore2 = tempScore;// 先把分数备份好
 			// 下面的for循环调用java.util.Arrays.copyOf()方法复制数组，实现备份
 			for (int i = 0; i < backup.length; i++)
 			{
@@ -170,7 +181,7 @@ public class Actions extends KeyAdapter implements ActionListener
 			}
 		}
 
-		tempscore = score;// 先把分数备份好
+		tempScore = score;// 先把分数备份好
 		// 下面的for循环调用java.util.Arrays.copyOf()方法复制数组，实现备份
 		for (int i = 0; i < numbers.length; i++)
 		{
@@ -184,7 +195,7 @@ public class Actions extends KeyAdapter implements ActionListener
 
 				case 37:
 					// 向左移动
-					if (isSound == true)
+					if (soundFlag == true)
 						new PlaySoundThread("move.wav").start();
 					for (int h = 0; h < 4; h++)
 						for (int l = 0; l < 4; l++)
@@ -205,7 +216,7 @@ public class Actions extends KeyAdapter implements ActionListener
 							if (l + 1 < 4 && (numbers[h][l] == numbers[h][l + 1])
 									&& (numbers[h][l] != 0 || numbers[h][l + 1] != 0))
 							{
-								if (isSound == true)
+								if (soundFlag == true)
 									new PlaySoundThread("merge.wav").start();
 								numbers[h][l] = numbers[h][l] + numbers[h][l + 1];
 								numbers[h][l + 1] = 0;
@@ -234,7 +245,7 @@ public class Actions extends KeyAdapter implements ActionListener
 					break;
 
 				case 39:// 向右移动
-					if (isSound == true)
+					if (soundFlag == true)
 						new PlaySoundThread("move.wav").start();
 					for (int h = 3; h >= 0; h--)
 						for (int l = 3; l >= 0; l--)
@@ -256,7 +267,7 @@ public class Actions extends KeyAdapter implements ActionListener
 							if (l + 1 < 4 && (numbers[h][l] == numbers[h][l + 1])
 									&& (numbers[h][l] != 0 || numbers[h][l + 1] != 0))
 							{
-								if (isSound == true)
+								if (soundFlag == true)
 									new PlaySoundThread("merge.wav").start();
 								numbers[h][l + 1] = numbers[h][l] + numbers[h][l + 1];
 								numbers[h][l] = 0;
@@ -285,7 +296,7 @@ public class Actions extends KeyAdapter implements ActionListener
 
 				case 38:
 					// 向上移动
-					if (isSound == true)
+					if (soundFlag == true)
 						new PlaySoundThread("move.wav").start();
 					for (int l = 0; l < 4; l++)
 						for (int h = 0; h < 4; h++)
@@ -306,7 +317,7 @@ public class Actions extends KeyAdapter implements ActionListener
 							if (h + 1 < 4 && (numbers[h][l] == numbers[h + 1][l])
 									&& (numbers[h][l] != 0 || numbers[h + 1][l] != 0))
 							{
-								if (isSound == true)
+								if (soundFlag == true)
 									new PlaySoundThread("merge.wav").start();
 								numbers[h][l] = numbers[h][l] + numbers[h + 1][l];
 								numbers[h + 1][l] = 0;
@@ -336,7 +347,7 @@ public class Actions extends KeyAdapter implements ActionListener
 
 				case 40:
 					// 向下移动
-					if (isSound == true)
+					if (soundFlag == true)
 						new PlaySoundThread("move.wav").start();
 					for (int l = 3; l >= 0; l--)
 						for (int h = 3; h >= 0; h--)
@@ -357,7 +368,7 @@ public class Actions extends KeyAdapter implements ActionListener
 							if (h + 1 < 4 && (numbers[h][l] == numbers[h + 1][l])
 									&& (numbers[h][l] != 0 || numbers[h + 1][l] != 0))
 							{
-								if (isSound == true)
+								if (soundFlag == true)
 									new PlaySoundThread("merge.wav").start();
 								numbers[h + 1][l] = numbers[h][l] + numbers[h + 1][l];
 								numbers[h][l] = 0;
