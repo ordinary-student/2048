@@ -1,12 +1,11 @@
 package com.game.thread;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
+import javax.sound.sampled.DataLine.Info;
 import javax.sound.sampled.SourceDataLine;
 
 /**
@@ -19,56 +18,63 @@ public class PlaySoundThread extends Thread
 {
 	private String filename;
 
+	/*
+	 * 构造方法
+	 */
 	public PlaySoundThread(String wavfile)
 	{
-
-		filename = "res/" + wavfile;
+		this.filename = "res/" + wavfile;
 	}
 
+	@Override
 	public void run()
 	{
-		File soundFile = new File(filename);
-		AudioInputStream audioInputStream = null;
+		// 数据行
+		SourceDataLine sourceDataLine = null;
 		try
 		{
-			audioInputStream = AudioSystem.getAudioInputStream(soundFile);
-		} catch (Exception e1)
-		{
-			e1.printStackTrace();
-			return;
-		}
-		AudioFormat format = audioInputStream.getFormat();
-		SourceDataLine auline = null;
-		DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-		try
-		{
-			auline = (SourceDataLine) AudioSystem.getLine(info);
-			auline.open(format);
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-			return;
-		}
-		auline.start();
-		int nBytesRead = 0;
-		// 这是缓冲
-		byte[] abData = new byte[512];
-		try
-		{
-			while (nBytesRead != -1)
+			// 封装声音文件
+			File soundFile = new File(filename);
+			// 音频输入流
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+
+			// 音频格式
+			AudioFormat format = audioInputStream.getFormat();
+			// 格式化
+			Info info = new Info(SourceDataLine.class, format);
+
+			// 数据行
+			sourceDataLine = (SourceDataLine) AudioSystem.getLine(info);
+			// 打开
+			sourceDataLine.open(format);
+
+			// 开始
+			sourceDataLine.start();
+
+			// 数据
+			int audioData = 0;
+			// 缓冲区
+			byte[] dataByte = new byte[512];
+			// 循环读写
+			while (audioData != -1)
 			{
-				nBytesRead = audioInputStream.read(abData, 0, abData.length);
-				if (nBytesRead >= 0)
-					auline.write(abData, 0, nBytesRead);
+				// 读取
+				audioData = audioInputStream.read(dataByte, 0, dataByte.length);
+				if (audioData >= 0)
+				{
+					sourceDataLine.write(dataByte, 0, audioData);
+				}
 			}
-		} catch (IOException e)
+
+		} catch (Exception e)
 		{
 			e.printStackTrace();
 			return;
 		} finally
 		{
-			auline.drain();
-			auline.close();
+			// 关闭流
+			sourceDataLine.drain();
+			sourceDataLine.close();
 		}
 	}
 }
