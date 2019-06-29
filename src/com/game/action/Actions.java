@@ -49,6 +49,9 @@ public class Actions extends KeyAdapter implements ActionListener
 	// 标志
 	private boolean isWin = false, relive = false, hasBack = false, soundFlag = true;
 
+	/*
+	 * 构造方法
+	 */
 	public Actions(GameFrame gameFrame, int[][] numbers, JLabel scoreLabel, JButton startButton, JButton aboutButton,
 			JButton backButton, JCheckBox soundCheckBok)
 	{
@@ -72,42 +75,17 @@ public class Actions extends KeyAdapter implements ActionListener
 
 		} else if (e.getSource() == aboutButton)
 		{
-			JOptionPane.showMessageDialog(gameFrame,
-					"游戏规则：\n" + "开始时棋盘内随机出现两个数字，出现的数字仅可能为2或4\n" + "玩家可以选择上下左右四个方向，若棋盘内的数字出现位移或合并，视为有效移动\n"
-							+ "玩家选择的方向上若有相同的数字则合并，每次有效移动可以同时合并，但不可以连续合并\n" + "合并所得的所有新生成数字想加即为该步的有效得分\n"
-							+ "玩家选择的方向行或列前方有空格则出现位移\n" + "每有效移动一步，棋盘的空位(无数字处)随机出现一个数字(依然可能为2或4)\n"
-							+ "棋盘被数字填满，无法进行有效移动，判负，游戏结束\n" + "棋盘上出现2048，判胜，游戏结束。\n");
-		} else if (e.getSource() == backButton && hasBack == false)
+			// 显示关于信息
+			showAboutDialog();
+
+		} else if ((e.getSource() == backButton) && (hasBack == true))
 		{
-			hasBack = true;
-			if (relive == false)
-			{
-				score = tempScore;
-				scoreLabel.setText("分数：" + score);
-				for (int i = 0; i < backup.length; i++)
-				{
-					numbers[i] = Arrays.copyOf(backup[i], backup[i].length);
-				}
-			} else
-			{
-				score = tempScore2;
-				scoreLabel.setText("分数：" + score);
-				for (int i = 0; i < liveup.length; i++)
-				{
-					numbers[i] = Arrays.copyOf(liveup[i], liveup[i].length);
-				}
-				relive = false;
-			}
-			gameFrame.paint(gameFrame.getGraphics());
+			// 回退
+			backup();
+
 		} else if (e.getSource().equals(soundCheckBok))
 		{
-			if (soundCheckBok.isSelected())
-			{
-				soundFlag = false;
-			} else
-			{
-				soundFlag = true;
-			}
+			soundFlag = !soundCheckBok.isSelected();
 		}
 	}
 
@@ -157,6 +135,55 @@ public class Actions extends KeyAdapter implements ActionListener
 		gameFrame.paint(gameFrame.getGraphics());
 	}
 
+	/**
+	 * 显示关于窗口
+	 */
+	private void showAboutDialog()
+	{
+		JOptionPane.showMessageDialog(gameFrame,
+				"游戏规则：\r\n" + "开始时棋盘内随机出现两个数字，出现的数字仅可能为2或4\r\n" + "玩家可以选择上下左右四个方向，若棋盘内的数字出现位移或合并，视为有效移动\r\n"
+						+ "玩家选择的方向上若有相同的数字则合并，每次有效移动可以同时合并，但不可以连续合并\r\n" + "合并所得的所有新生成数字想加即为该步的有效得分\r\n"
+						+ "玩家选择的方向行或列前方有空格则出现位移\r\n" + "每有效移动一步，棋盘的空位(无数字处)随机出现一个数字(依然可能为2或4)\r\n"
+						+ "棋盘被数字填满，无法进行有效移动，判负，游戏结束\r\n" + "棋盘上出现2048，判胜，游戏结束。\r\n");
+	}
+
+	/**
+	 * 回退
+	 */
+	private void backup()
+	{
+		// 设置不可回退，只能回退一次
+		hasBack = false;
+
+		// 可起死回生
+		if (relive)
+		{
+			// 回退分数
+			score = tempScore2;
+			scoreLabel.setText("分数：" + score);
+			// 回退数据
+			for (int i = 0; i < liveup.length; i++)
+			{
+				numbers[i] = Arrays.copyOf(liveup[i], liveup[i].length);
+			}
+
+			relive = false;
+		} else
+		{
+			// 回退分数
+			score = tempScore;
+			scoreLabel.setText("分数：" + score);
+			// 回退数据
+			for (int i = 0; i < backup.length; i++)
+			{
+				numbers[i] = Arrays.copyOf(backup[i], backup[i].length);
+			}
+		}
+
+		// 重新绘制
+		gameFrame.paint(gameFrame.getGraphics());
+	}
+
 	// 键盘监听
 	@Override
 	public void keyPressed(KeyEvent event)
@@ -168,8 +195,6 @@ public class Actions extends KeyAdapter implements ActionListener
 		/*
 		 * 方向键键值：左：37上：38右：39下：40
 		 */
-
-		hasBack = false;
 
 		if (backup != null || backup.length != 0)
 		{
@@ -459,6 +484,9 @@ public class Actions extends KeyAdapter implements ActionListener
 			}
 			gameFrame.paint(gameFrame.getGraphics());
 		}
+
+		// 设置可回退
+		hasBack = true;
 
 	}
 
