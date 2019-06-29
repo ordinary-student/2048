@@ -189,248 +189,53 @@ public class Actions extends KeyAdapter implements ActionListener
 	public void keyPressed(KeyEvent event)
 	{
 		// 判断是否移动了
-		int move = 0;
+		boolean isMove = false;
 		// 用于统计整个大方框中数字的个数，判断是否已满
 		int numberCount = 0;
 		// 用于统计相邻格子数字相同的个数
 		int sameNumberCount = 0;
-		/*
-		 * 方向键键值：左：37上：38右：39下：40
-		 */
 
-		if (backup != null || backup.length != 0)
-		{
-			tempScore2 = tempScore;// 先把分数备份好
-			// 下面的for循环调用java.util.Arrays.copyOf()方法复制数组，实现备份
-			for (int i = 0; i < backup.length; i++)
-			{
-				liveup[i] = Arrays.copyOf(backup[i], backup[i].length);
-			}
-		}
+		// 备份分数和数据
+		backupData();
 
-		tempScore = score;// 先把分数备份好
-		// 下面的for循环调用java.util.Arrays.copyOf()方法复制数组，实现备份
-		for (int i = 0; i < numbers.length; i++)
+		// 没赢才进去
+		if (!isWin)
 		{
-			backup[i] = Arrays.copyOf(numbers[i], numbers[i].length);
-		}
-
-		if (isWin == false)
-		{
+			// 判断按键方向
 			switch (event.getKeyCode())
 				{
 
 				case KeyEvent.VK_LEFT:
-					{// 向左移动
-						if (soundFlag == true)
-							new PlaySoundThread("move.wav").start();
-						for (int h = 0; h < 4; h++)
-							for (int l = 0; l < 4; l++)
-								if (numbers[h][l] != 0)
-								{
-									int temp = numbers[h][l];
-									int pre = l - 1;
-									while (pre >= 0 && numbers[h][pre] == 0)
-									{
-										numbers[h][pre] = temp;
-										numbers[h][pre + 1] = 0;
-										pre--;
-										move++;
-									}
-								}
-						for (int h = 0; h < 4; h++)
-							for (int l = 0; l < 4; l++)
-								if (l + 1 < 4 && (numbers[h][l] == numbers[h][l + 1])
-										&& (numbers[h][l] != 0 || numbers[h][l + 1] != 0))
-								{
-									if (soundFlag == true)
-										new PlaySoundThread("merge.wav").start();
-									numbers[h][l] = numbers[h][l] + numbers[h][l + 1];
-									numbers[h][l + 1] = 0;
-									move++;
-									score += numbers[h][l];
-									if (numbers[h][l] == 2048)
-									{
-										isWin = true;
-									}
-								}
-
-						for (int h = 0; h < 4; h++)
-							for (int l = 0; l < 4; l++)
-								if (numbers[h][l] != 0)
-								{
-									int temp = numbers[h][l];
-									int pre = l - 1;
-									while (pre >= 0 && numbers[h][pre] == 0)
-									{
-										numbers[h][pre] = temp;
-										numbers[h][pre + 1] = 0;
-										pre--;
-										move++;
-									}
-								}
-						break;
-					}
-
-				case 39:// 向右移动
 					{
-						if (soundFlag == true)
-							new PlaySoundThread("move.wav").start();
-						for (int h = 3; h >= 0; h--)
-							for (int l = 3; l >= 0; l--)
-								if (numbers[h][l] != 0)
-								{
-									int temp = numbers[h][l];
-									int pre = l + 1;
-									while (pre <= 3 && numbers[h][pre] == 0)
-									{
-										numbers[h][pre] = temp;
-										numbers[h][pre - 1] = 0;
-										pre++;
-										move++;
-									}
-								}
-
-						for (int h = 3; h >= 0; h--)
-							for (int l = 3; l >= 0; l--)
-								if (l + 1 < 4 && (numbers[h][l] == numbers[h][l + 1])
-										&& (numbers[h][l] != 0 || numbers[h][l + 1] != 0))
-								{
-									if (soundFlag == true)
-										new PlaySoundThread("merge.wav").start();
-									numbers[h][l + 1] = numbers[h][l] + numbers[h][l + 1];
-									numbers[h][l] = 0;
-									move++;
-									score += numbers[h][l + 1];
-									if (numbers[h][l + 1] == 2048)
-									{
-										isWin = true;
-									}
-								}
-						for (int h = 3; h >= 0; h--)
-							for (int l = 3; l >= 0; l--)
-								if (numbers[h][l] != 0)
-								{
-									int temp = numbers[h][l];
-									int pre = l + 1;
-									while (pre <= 3 && numbers[h][pre] == 0)
-									{
-										numbers[h][pre] = temp;
-										numbers[h][pre - 1] = 0;
-										pre++;
-										move++;
-									}
-								}
+						// 向左移动
+						isMove = moveLeft();
 						break;
 					}
 
-				case 38:
-				// 向上移动
+				case KeyEvent.VK_RIGHT:
 					{
-						if (soundFlag == true)
-							new PlaySoundThread("move.wav").start();
-						for (int l = 0; l < 4; l++)
-							for (int h = 0; h < 4; h++)
-								if (numbers[h][l] != 0)
-								{
-									int temp = numbers[h][l];
-									int pre = h - 1;
-									while (pre >= 0 && numbers[pre][l] == 0)
-									{
-										numbers[pre][l] = temp;
-										numbers[pre + 1][l] = 0;
-										pre--;
-										move++;
-									}
-								}
-						for (int l = 0; l < 4; l++)
-							for (int h = 0; h < 4; h++)
-								if (h + 1 < 4 && (numbers[h][l] == numbers[h + 1][l])
-										&& (numbers[h][l] != 0 || numbers[h + 1][l] != 0))
-								{
-									if (soundFlag == true)
-										new PlaySoundThread("merge.wav").start();
-									numbers[h][l] = numbers[h][l] + numbers[h + 1][l];
-									numbers[h + 1][l] = 0;
-									move++;
-									score += numbers[h][l];
-									if (numbers[h][l] == 2048)
-									{
-										isWin = true;
-									}
-								}
-
-						for (int l = 0; l < 4; l++)
-							for (int h = 0; h < 4; h++)
-								if (numbers[h][l] != 0)
-								{
-									int temp = numbers[h][l];
-									int pre = h - 1;
-									while (pre >= 0 && numbers[pre][l] == 0)
-									{
-										numbers[pre][l] = temp;
-										numbers[pre + 1][l] = 0;
-										pre--;
-										move++;
-									}
-								}
+						// 向右移动
+						isMove = moveRight();
 						break;
 					}
 
-				case 40:
-					{ // 向下移动
-						if (soundFlag == true)
-							new PlaySoundThread("move.wav").start();
-						for (int l = 3; l >= 0; l--)
-							for (int h = 3; h >= 0; h--)
-								if (numbers[h][l] != 0)
-								{
-									int temp = numbers[h][l];
-									int pre = h + 1;
-									while (pre <= 3 && numbers[pre][l] == 0)
-									{
-										numbers[pre][l] = temp;
-										numbers[pre - 1][l] = 0;
-										pre++;
-										move++;
-									}
-								}
-						for (int l = 3; l >= 0; l--)
-							for (int h = 3; h >= 0; h--)
-								if (h + 1 < 4 && (numbers[h][l] == numbers[h + 1][l])
-										&& (numbers[h][l] != 0 || numbers[h + 1][l] != 0))
-								{
-									if (soundFlag == true)
-										new PlaySoundThread("merge.wav").start();
-									numbers[h + 1][l] = numbers[h][l] + numbers[h + 1][l];
-									numbers[h][l] = 0;
-									move++;
-									score += numbers[h + 1][l];
-									if (numbers[h + 1][l] == 2048)
-									{
-										isWin = true;
-									}
-								}
+				case KeyEvent.VK_UP:
+					{
+						// 向上移动
+						isMove = moveUp();
+						break;
+					}
 
-						for (int l = 3; l >= 0; l--)
-							for (int h = 3; h >= 0; h--)
-								if (numbers[h][l] != 0)
-								{
-									int temp = numbers[h][l];
-									int pre = h + 1;
-									while (pre <= 3 && numbers[pre][l] == 0)
-									{
-										numbers[pre][l] = temp;
-										numbers[pre - 1][l] = 0;
-										pre++;
-										move++;
-									}
-								}
+				case KeyEvent.VK_DOWN:
+					{
+						// 向下移动
+						isMove = moveDown();
 						break;
 					}
 
 				}
 
+			// 遍历-判断相邻数字是否相同
 			for (int i = 0; i < 3; i++)
 			{
 				for (int j = 0; j < 3; j++)
@@ -453,6 +258,8 @@ public class Actions extends KeyAdapter implements ActionListener
 					}
 				}
 			}
+
+			// 遍历-判断数字是否已经填满
 			for (int i = 0; i < 4; i++)
 			{
 				for (int j = 0; j < 4; j++)
@@ -463,10 +270,12 @@ public class Actions extends KeyAdapter implements ActionListener
 					}
 				}
 			}
-			if (move > 0)
-			{
 
+			// 是否有移动
+			if (isMove)
+			{
 				scoreLabel.setText("分数：" + score);
+				// 生产随机位置
 				int r1 = rand.nextInt(4);
 				int c1 = rand.nextInt(4);
 				while (numbers[r1][c1] != 0)
@@ -474,28 +283,431 @@ public class Actions extends KeyAdapter implements ActionListener
 					r1 = rand.nextInt(4);
 					c1 = rand.nextInt(4);
 				}
+
+				// 生产随机数字2或4
 				int value1 = rand.nextInt(2) * 2 + 2;
 				numbers[r1][c1] = value1;
+
 			}
 
-			if (isWin == true)
+			// 判断是否胜利
+			if (isWin)
 			{
 				gameFrame.paint(gameFrame.getGraphics());
-				JOptionPane.showMessageDialog(gameFrame, "恭喜你赢了!\n您的最终得分为：" + score);
+				JOptionPane.showMessageDialog(gameFrame, "恭喜你赢了!\r\n您的最终得分为：" + score);
 			}
 
-			if (numberCount == 16 && sameNumberCount == 0)
+			// 若格子已经填满且相邻数字没有相同的，判负
+			if ((numberCount == 16) && (sameNumberCount == 0))
 			{
 				relive = true;
-				JOptionPane.showMessageDialog(gameFrame,
-						"没地方可以合并咯!!" + "\n很遗憾，您输了~>_<~" + "\n悄悄告诉你，游戏有起死回生功能哦，不信你“退一步”试试？" + "\n说不定能扭转乾坤捏 （^_~）");
+				JOptionPane.showMessageDialog(gameFrame, "没地方可以合并啦!\r\n很遗憾，您输了~>_<~\r\n您可以尝试退一步看看\r\n说不定能扭转乾坤捏 （^_~）");
 			}
+
+			// 绘制
 			gameFrame.paint(gameFrame.getGraphics());
 		}
 
 		// 设置可回退
 		hasBack = true;
 
+	}
+
+	/**
+	 * 备份数据
+	 */
+	private void backupData()
+	{
+		// 备份数据和分数
+		// 备份复活数据
+		if (backup != null || backup.length != 0)
+		{
+			// 备份复活分数
+			tempScore2 = tempScore;
+			// 复制数组，备份数据
+			for (int i = 0; i < backup.length; i++)
+			{
+				liveup[i] = Arrays.copyOf(backup[i], backup[i].length);
+			}
+		}
+
+		// 备份回退分数
+		tempScore = score;
+		// 复制数组，备份回退数据
+		for (int i = 0; i < numbers.length; i++)
+		{
+			backup[i] = Arrays.copyOf(numbers[i], numbers[i].length);
+		}
+
+	}
+
+	/**
+	 * 向左移动
+	 */
+	private boolean moveLeft()
+	{
+		// 移动标志
+		boolean isMove = false;
+
+		// 播放移动音效
+		if (soundFlag)
+		{
+			new PlaySoundThread("move.wav").start();
+		}
+
+		// 遍历-数字向左移动到尽头
+		for (int row = 0; row < 4; row++)
+		{
+			for (int col = 0; col < 4; col++)
+			{
+				// 数字不为零
+				if (numbers[row][col] != 0)
+				{
+
+					int temp = numbers[row][col];
+					// 前一列
+					int preCol = col - 1;
+					// 前一列存在且数字为0，则交换数字
+					while ((preCol >= 0) && (numbers[row][preCol] == 0))
+					{
+						// 交换数字
+						numbers[row][preCol] = temp;
+						numbers[row][preCol + 1] = 0;
+						// 继续查找前一列，直至数字向左移动到尽头
+						preCol--;
+						// 更改移动标志
+						isMove = true;
+					}
+				}
+			}
+		}
+
+		// 遍历-合并相同数字
+		for (int row = 0; row < 4; row++)
+		{
+			for (int col = 0; col < 4; col++)
+			{
+				// 若相邻两数字相等，且不为零
+				if ((col + 1 < 4) && (numbers[row][col] == numbers[row][col + 1])
+						&& ((numbers[row][col] != 0) || (numbers[row][col + 1] != 0)))
+				{
+					// 播放合并音效
+					if (soundFlag)
+					{
+						new PlaySoundThread("merge.wav").start();
+					}
+
+					// 向左合并数字
+					numbers[row][col] = numbers[row][col] + numbers[row][col + 1];
+					// 右列变0
+					numbers[row][col + 1] = 0;
+
+					// 更改移动标志
+					isMove = true;
+
+					// 加分数
+					score = score + numbers[row][col];
+
+					// 若出现2048则胜利
+					if (numbers[row][col] == 2048)
+					{
+						isWin = true;
+					}
+				}
+			}
+		}
+
+		// 遍历-数字向左移动到尽头
+		for (int row = 0; row < 4; row++)
+		{
+			for (int col = 0; col < 4; col++)
+			{
+				// 数字不为零
+				if (numbers[row][col] != 0)
+				{
+					int temp = numbers[row][col];
+					// 前一列
+					int preCol = col - 1;
+					// 前一列存在且数字为0，则交换数字
+					while ((preCol >= 0) && (numbers[row][preCol] == 0))
+					{
+						// 交换数字
+						numbers[row][preCol] = temp;
+						numbers[row][preCol + 1] = 0;
+						// 继续查找前一列，直至数字向左移动到尽头
+						preCol--;
+						// 更改移动标志
+						isMove = true;
+					}
+				}
+			}
+		}
+
+		// 返回移动标志
+		return isMove;
+
+	}
+
+	/**
+	 * 向右移动
+	 */
+	private boolean moveRight()
+	{
+		// 移动标志
+		boolean isMove = false;
+		// 播放移动音效
+		if (soundFlag)
+		{
+			new PlaySoundThread("move.wav").start();
+		}
+
+		// 遍历-数字向右移至尽头
+		for (int row = 3; row >= 0; row--)
+		{
+			for (int col = 3; col >= 0; col--)
+			{
+				// 不为零
+				if (numbers[row][col] != 0)
+				{
+					int temp = numbers[row][col];
+					int nextCol = col + 1;
+					// 交换数字
+					while ((nextCol <= 3) && (numbers[row][nextCol] == 0))
+					{
+						numbers[row][nextCol] = temp;
+						numbers[row][nextCol - 1] = 0;
+						nextCol++;
+						isMove = true;
+					}
+				}
+			}
+		}
+
+		// 遍历-向右合并相同数字
+		for (int row = 3; row >= 0; row--)
+		{
+			for (int col = 3; col >= 0; col--)
+			{
+				if ((col + 1 < 4) && (numbers[row][col] == numbers[row][col + 1])
+						&& ((numbers[row][col] != 0) || (numbers[row][col + 1] != 0)))
+				{
+					// 播放合并音效
+					if (soundFlag)
+					{
+						new PlaySoundThread("merge.wav").start();
+					}
+
+					// 合并数字
+					numbers[row][col + 1] = numbers[row][col] + numbers[row][col + 1];
+					numbers[row][col] = 0;
+
+					isMove = true;
+
+					// 加分数
+					score = score + numbers[row][col + 1];
+					// 判断是否胜利
+					if (numbers[row][col + 1] == 2048)
+					{
+						isWin = true;
+					}
+				}
+			}
+		}
+
+		// 遍历-数字向右移至尽头
+		for (int row = 3; row >= 0; row--)
+		{
+			for (int col = 3; col >= 0; col--)
+			{
+				if (numbers[row][col] != 0)
+				{
+					int temp = numbers[row][col];
+					int nextCol = col + 1;
+					while ((nextCol <= 3) && (numbers[row][nextCol] == 0))
+					{
+						numbers[row][nextCol] = temp;
+						numbers[row][nextCol - 1] = 0;
+						nextCol++;
+						isMove = true;
+					}
+				}
+			}
+		}
+
+		// 返回移动标志
+		return isMove;
+	}
+
+	/**
+	 * 向上移动
+	 */
+	private boolean moveUp()
+	{
+		// 移动标志
+		boolean isMove = false;
+
+		// 播放移动音效
+		if (soundFlag == true)
+		{
+			new PlaySoundThread("move.wav").start();
+		}
+
+		// 遍历-数字向上移至尽头
+		for (int col = 0; col < 4; col++)
+		{
+			for (int row = 0; row < 4; row++)
+			{
+				if (numbers[row][col] != 0)
+				{
+					int temp = numbers[row][col];
+					// 前一行
+					int preRow = row - 1;
+					// 交换数字
+					while ((preRow >= 0) && (numbers[preRow][col] == 0))
+					{
+						numbers[preRow][col] = temp;
+						numbers[preRow + 1][col] = 0;
+						preRow--;
+						isMove = true;
+					}
+				}
+			}
+		}
+
+		// 遍历-向上合并相同的数字
+		for (int col = 0; col < 4; col++)
+		{
+			for (int row = 0; row < 4; row++)
+			{
+				if ((row + 1 < 4) && (numbers[row][col] == numbers[row + 1][col])
+						&& ((numbers[row][col] != 0) || (numbers[row + 1][col] != 0)))
+				{
+					if (soundFlag == true)
+					{
+						new PlaySoundThread("merge.wav").start();
+					}
+
+					numbers[row][col] = numbers[row][col] + numbers[row + 1][col];
+					numbers[row + 1][col] = 0;
+
+					isMove = true;
+
+					score = score + numbers[row][col];
+
+					if (numbers[row][col] == 2048)
+					{
+						isWin = true;
+					}
+				}
+			}
+		}
+
+		// 遍历-数字向上移至尽头
+		for (int col = 0; col < 4; col++)
+		{
+			for (int row = 0; row < 4; row++)
+			{
+				if (numbers[row][col] != 0)
+				{
+					int temp = numbers[row][col];
+					// 前一行
+					int preRow = row - 1;
+					// 交换数字
+					while ((preRow >= 0) && (numbers[preRow][col] == 0))
+					{
+						numbers[preRow][col] = temp;
+						numbers[preRow + 1][col] = 0;
+						preRow--;
+						isMove = true;
+					}
+				}
+			}
+		}
+
+		//
+		return isMove;
+	}
+
+	/**
+	 * 向下移动
+	 */
+	private boolean moveDown()
+	{
+		boolean isMove = false;
+
+		if (soundFlag == true)
+		{
+			new PlaySoundThread("move.wav").start();
+		}
+
+		for (int col = 3; col >= 0; col--)
+		{
+			for (int row = 3; row >= 0; row--)
+			{
+				if (numbers[row][col] != 0)
+				{
+					int temp = numbers[row][col];
+					int nextRow = row + 1;
+					while ((nextRow <= 3) && (numbers[nextRow][col] == 0))
+					{
+						numbers[nextRow][col] = temp;
+						numbers[nextRow - 1][col] = 0;
+						nextRow++;
+						isMove = true;
+					}
+				}
+			}
+		}
+
+		for (int col = 3; col >= 0; col--)
+		{
+			for (int row = 3; row >= 0; row--)
+			{
+				if ((row + 1 < 4) && (numbers[row][col] == numbers[row + 1][col])
+						&& ((numbers[row][col] != 0) || (numbers[row + 1][col] != 0)))
+				{
+					if (soundFlag == true)
+					{
+						new PlaySoundThread("merge.wav").start();
+					}
+
+					numbers[row + 1][col] = numbers[row][col] + numbers[row + 1][col];
+					numbers[row][col] = 0;
+
+					isMove = true;
+
+					score = score + numbers[row + 1][col];
+
+					if (numbers[row + 1][col] == 2048)
+					{
+						isWin = true;
+					}
+				}
+			}
+		}
+
+		for (int col = 3; col >= 0; col--)
+		{
+			for (int row = 3; row >= 0; row--)
+			{
+				if (numbers[row][col] != 0)
+				{
+					int temp = numbers[row][col];
+					int nextRow = row + 1;
+
+					while ((nextRow <= 3) && (numbers[nextRow][col] == 0))
+					{
+						numbers[nextRow][col] = temp;
+						numbers[nextRow - 1][col] = 0;
+						nextRow++;
+						isMove = true;
+					}
+				}
+			}
+		}
+
+		//
+		return isMove;
 	}
 
 }
