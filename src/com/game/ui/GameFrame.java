@@ -250,7 +250,7 @@ public class GameFrame extends KFrame
 								break;
 							}
 
-						default:
+						default:// 0不画
 							{
 								g.setColor(new Color(0x000000));
 								break;
