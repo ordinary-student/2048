@@ -582,18 +582,22 @@ public class Actions extends KeyAdapter implements ActionListener
 				if ((row + 1 < 4) && (numbers[row][col] == numbers[row + 1][col])
 						&& ((numbers[row][col] != 0) || (numbers[row + 1][col] != 0)))
 				{
+					// 播放合并音效
 					if (soundFlag == true)
 					{
 						new PlaySoundThread("merge.wav").start();
 					}
 
+					// 向上合并相同数字
 					numbers[row][col] = numbers[row][col] + numbers[row + 1][col];
 					numbers[row + 1][col] = 0;
 
 					isMove = true;
 
+					// 加分数
 					score = score + numbers[row][col];
 
+					// 判断
 					if (numbers[row][col] == 2048)
 					{
 						isWin = true;
@@ -624,7 +628,7 @@ public class Actions extends KeyAdapter implements ActionListener
 			}
 		}
 
-		//
+		// 返回
 		return isMove;
 	}
 
@@ -633,21 +637,27 @@ public class Actions extends KeyAdapter implements ActionListener
 	 */
 	private boolean moveDown()
 	{
+		// 移动标志
 		boolean isMove = false;
 
-		if (soundFlag == true)
+		// 播放移动音效
+		if (soundFlag)
 		{
 			new PlaySoundThread("move.wav").start();
 		}
 
+		// 遍历-数字向下移至尽头
 		for (int col = 3; col >= 0; col--)
 		{
 			for (int row = 3; row >= 0; row--)
 			{
+				// 交换数字
 				if (numbers[row][col] != 0)
 				{
 					int temp = numbers[row][col];
+					// 下一行
 					int nextRow = row + 1;
+					// 交换数字
 					while ((nextRow <= 3) && (numbers[nextRow][col] == 0))
 					{
 						numbers[nextRow][col] = temp;
@@ -659,6 +669,7 @@ public class Actions extends KeyAdapter implements ActionListener
 			}
 		}
 
+		// 遍历-向下合并相同数字
 		for (int col = 3; col >= 0; col--)
 		{
 			for (int row = 3; row >= 0; row--)
@@ -666,18 +677,22 @@ public class Actions extends KeyAdapter implements ActionListener
 				if ((row + 1 < 4) && (numbers[row][col] == numbers[row + 1][col])
 						&& ((numbers[row][col] != 0) || (numbers[row + 1][col] != 0)))
 				{
-					if (soundFlag == true)
+					// 播放合并音效
+					if (soundFlag)
 					{
 						new PlaySoundThread("merge.wav").start();
 					}
 
+					// 合并
 					numbers[row + 1][col] = numbers[row][col] + numbers[row + 1][col];
 					numbers[row][col] = 0;
 
 					isMove = true;
 
+					// 加分
 					score = score + numbers[row + 1][col];
 
+					// 判断
 					if (numbers[row + 1][col] == 2048)
 					{
 						isWin = true;
@@ -686,10 +701,12 @@ public class Actions extends KeyAdapter implements ActionListener
 			}
 		}
 
+		// 遍历-数字向下移至尽头
 		for (int col = 3; col >= 0; col--)
 		{
 			for (int row = 3; row >= 0; row--)
 			{
+				// 交换数字
 				if (numbers[row][col] != 0)
 				{
 					int temp = numbers[row][col];
@@ -706,7 +723,7 @@ public class Actions extends KeyAdapter implements ActionListener
 			}
 		}
 
-		//
+		// 返回
 		return isMove;
 	}
 

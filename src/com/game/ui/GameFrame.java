@@ -13,7 +13,7 @@ import com.game.action.Actions;
 import com.game.utils.WindowUtil;
 
 /**
- * 2048游戏
+ * 2048小游戏
  * 
  * @author ordinary-student
  *
