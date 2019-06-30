@@ -190,9 +190,9 @@ public class Actions extends KeyAdapter implements ActionListener
 	{
 		// 判断是否移动了
 		boolean isMove = false;
-		// 用于统计整个大方框中数字的个数，判断是否已满
-		// int numberCount = 0;
-		// 判断相邻格子数字是否相同
+		// 判断是否已满
+		boolean isFilled = false;
+		// 判断是否有相同的相邻数字
 		boolean hasSameNumber = false;
 
 		// 备份分数和数据
@@ -238,7 +238,7 @@ public class Actions extends KeyAdapter implements ActionListener
 			hasSameNumber = hasSameAdjacentNumbers();
 
 			// 遍历-判断数字是否已经填满
-			isFilled();
+			isFilled = isFilled();
 
 			// 是否有移动
 			if (isMove)
@@ -270,7 +270,7 @@ public class Actions extends KeyAdapter implements ActionListener
 			}
 
 			// 若格子已经填满且相邻数字没有相同的，判负
-			if ((isFilled()) && (!hasSameNumber))
+			if (isFilled && (!hasSameNumber))
 			{
 				relive = true;
 				JOptionPane.showMessageDialog(gameFrame, "没地方可以合并啦!\r\n很遗憾，您输了~>_<~\r\n您可以尝试退一步看看\r\n说不定能扭转乾坤捏 （^_~）");
