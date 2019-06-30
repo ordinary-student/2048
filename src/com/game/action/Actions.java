@@ -254,7 +254,6 @@ public class Actions extends KeyAdapter implements ActionListener
 				{
 					randomRow = rand.nextInt(4);
 					randomCol = rand.nextInt(4);
-					System.out.println(randomRow);
 				}
 
 				// 生产随机数字2或4
