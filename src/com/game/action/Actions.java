@@ -191,9 +191,9 @@ public class Actions extends KeyAdapter implements ActionListener
 		// 判断是否移动了
 		boolean isMove = false;
 		// 用于统计整个大方框中数字的个数，判断是否已满
-		int numberCount = 0;
-		// 用于统计相邻格子数字相同的个数
-		int sameNumberCount = 0;
+		// int numberCount = 0;
+		// 判断相邻格子数字是否相同
+		boolean hasSameNumber = false;
 
 		// 备份分数和数据
 		backupData();
@@ -232,62 +232,34 @@ public class Actions extends KeyAdapter implements ActionListener
 						isMove = moveDown();
 						break;
 					}
-
 				}
 
-			// 遍历-判断相邻数字是否相同
-			for (int i = 0; i < 3; i++)
-			{
-				for (int j = 0; j < 3; j++)
-				{
-					if (numbers[i][j] == numbers[i][j + 1] && numbers[i][j] != 0)
-					{
-						sameNumberCount++;
-					}
-					if (numbers[i][j] == numbers[i + 1][j] && numbers[i][j] != 0)
-					{
-						sameNumberCount++;
-					}
-					if (numbers[3][j] == numbers[3][j + 1] && numbers[3][j] != 0)
-					{
-						sameNumberCount++;
-					}
-					if (numbers[i][3] == numbers[i + 1][3] && numbers[i][3] != 0)
-					{
-						sameNumberCount++;
-					}
-				}
-			}
+			// 判断是否有相同的相邻数字
+			hasSameNumber = hasSameAdjacentNumbers();
 
 			// 遍历-判断数字是否已经填满
-			for (int i = 0; i < 4; i++)
-			{
-				for (int j = 0; j < 4; j++)
-				{
-					if (numbers[i][j] != 0)
-					{
-						numberCount++;
-					}
-				}
-			}
+			isFilled();
 
 			// 是否有移动
 			if (isMove)
 			{
+				// 显示分数
 				scoreLabel.setText("分数：" + score);
-				// 生产随机位置
-				int r1 = rand.nextInt(4);
-				int c1 = rand.nextInt(4);
-				while (numbers[r1][c1] != 0)
+				// 生成随机位置
+				int randomRow = rand.nextInt(4);
+				int randomCol = rand.nextInt(4);
+
+				// 如果该位置已经有数字，重新生成
+				while (numbers[randomRow][randomCol] != 0)
 				{
-					r1 = rand.nextInt(4);
-					c1 = rand.nextInt(4);
+					randomRow = rand.nextInt(4);
+					randomCol = rand.nextInt(4);
+					System.out.println(randomRow);
 				}
 
 				// 生产随机数字2或4
-				int value1 = rand.nextInt(2) * 2 + 2;
-				numbers[r1][c1] = value1;
-
+				int randomNum = rand.nextInt(2) * 2 + 2;
+				numbers[randomRow][randomCol] = randomNum;
 			}
 
 			// 判断是否胜利
@@ -298,7 +270,7 @@ public class Actions extends KeyAdapter implements ActionListener
 			}
 
 			// 若格子已经填满且相邻数字没有相同的，判负
-			if ((numberCount == 16) && (sameNumberCount == 0))
+			if ((isFilled()) && (!hasSameNumber))
 			{
 				relive = true;
 				JOptionPane.showMessageDialog(gameFrame, "没地方可以合并啦!\r\n很遗憾，您输了~>_<~\r\n您可以尝试退一步看看\r\n说不定能扭转乾坤捏 （^_~）");
@@ -339,6 +311,78 @@ public class Actions extends KeyAdapter implements ActionListener
 			backup[i] = Arrays.copyOf(numbers[i], numbers[i].length);
 		}
 
+	}
+
+	/**
+	 * 判断是否有相同的相邻数字
+	 * 
+	 * @return
+	 */
+	private boolean hasSameAdjacentNumbers()
+	{
+		// 标志
+		boolean hasSameNumber = false;
+
+		// 遍历-判断相邻数字是否相同
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				if ((numbers[i][j] == numbers[i][j + 1]) && (numbers[i][j] != 0))
+				{
+					hasSameNumber = true;
+				}
+
+				if ((numbers[i][j] == numbers[i + 1][j]) && (numbers[i][j] != 0))
+				{
+					hasSameNumber = true;
+				}
+
+				if ((numbers[3][j] == numbers[3][j + 1]) && (numbers[3][j] != 0))
+				{
+					hasSameNumber = true;
+				}
+
+				if ((numbers[i][3] == numbers[i + 1][3]) && (numbers[i][3] != 0))
+				{
+					hasSameNumber = true;
+				}
+			}
+		}
+
+		// 返回
+		return hasSameNumber;
+	}
+
+	/**
+	 * 判断是否已经填满所有格子
+	 * 
+	 * @return
+	 */
+	private boolean isFilled()
+	{
+		// 用于统计整个大方框中数字的个数，判断是否已满
+		int numberCount = 0;
+		// 遍历-判断数字是否已经填满
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if (numbers[i][j] != 0)
+				{
+					numberCount++;
+				}
+			}
+		}
+
+		// 判断是否填满
+		if (numberCount == 16)
+		{
+			return true;
+		} else
+		{
+			return false;
+		}
 	}
 
 	/**
